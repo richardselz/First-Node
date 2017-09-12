@@ -12,30 +12,25 @@ var inputVal1 = process.argv[2];
 var inputVal2 = process.argv[3];
 if(process.argv[4]){
     for(var i = 4; i < process.argv.length; i++){
-        inputVal2 += process.argv[i];
+        inputVal2 += " "+process.argv[i];
     }
 }
 
 //Twitter call and returns
 function myTweets() {
-    console.log("In the myTweets function!");
-    // keys.twitterKeys
-    console.log(keys.twitterKeys);
-    // requests go below
-    queryURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?count=20";
-    Twit.request(queryURL, (err, data, body) =>{
+    // queryURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?count=20";
+    Twit.get("statuses/user_timeline", (err, data, body) =>{
         if(err){
             console.log(err);
         }
-        console.log("Body Length: ",body[3]);
-        console.log(body.screen_name+" created the post "+body.text+" on "+body.created_at);
+        for(var i = 0; i < data.length; i++){
+            console.log(data[i].user.screen_name+" created the post "+data[i].text+" on "+data[i].created_at);
+        }
     });
 }
 
 //spotify call and return
 function spotifySong() {
-    console.log("In the spotifySong function!");
-    // keys.spotifyKeys
     var songName = "The Sign  Ace of Base";
     if(inputVal2) {
         songName = inputVal2;
@@ -45,8 +40,6 @@ function spotifySong() {
     // request(queryURL, (err, response) => {
     //     console.log(response);
     // });
-    // console.log(queryURL);
-    // console.log("Keys: ",keys.spotifyKeys);
     Spot.request(queryURL, function(err,data) {
         if(err){
             return console.log("Error: "+err);
@@ -58,8 +51,6 @@ function spotifySong() {
         console.log("Preview Link: "+spot.external_urls.spotify);
         console.log(data.tracks.items[0].name+" is apart of the "+spot.name+" album created by "+spot.artists[0].name);
     });
-
-        // console.log("The Artist is: "+spotifyData.);
 }
 
 /*DONE*/
@@ -88,7 +79,6 @@ function movieThis() {
 
 //do what the file random.txt says to do
 function doWhat() {
-    console.log("In the doWhat function!");
     fs.readFile("random.txt", "utf8", (err, data) =>{
         if(err) {
             console.log("Error: ",err);
@@ -96,7 +86,6 @@ function doWhat() {
         readArr = data.split(',');
         inputVal1 = readArr[0];
         inputVal2 = readArr[1];
-        // console.log("Do what: input1: ",inputVal1," input2: ",inputVal2);
         inputCheck();
     });
 }
